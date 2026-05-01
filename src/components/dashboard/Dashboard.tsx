@@ -53,7 +53,7 @@ const SummaryCard = ({ title, value, type, trend }: { title: string, value: numb
   </div>
 );
 
-export const Dashboard = () => {
+export const Dashboard = ({ onAction }: { onAction?: (action: string) => void }) => {
   const { transactions, accounts, investments, goals } = useFinanceStore();
 
   const totalBalance = accounts.reduce((acc, curr) => acc + curr.balance, 0);
@@ -87,7 +87,10 @@ export const Dashboard = () => {
         <div>
           <h2 className="text-lg font-semibold">Visão Geral</h2>
         </div>
-        <button className="flex items-center gap-2 bg-brand text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-dark transition-all">
+        <button 
+          onClick={() => onAction?.('new-transaction')}
+          className="flex items-center gap-2 bg-brand text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-dark transition-all"
+        >
           <Plus size={18} />
           Nova Transação
         </button>

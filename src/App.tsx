@@ -52,7 +52,9 @@ export default function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard onAction={(action) => {
+          if (action === 'new-transaction') setActiveTab('transactions');
+        }} />;
       case 'transactions':
         return <TransactionView />;
       case 'cards':

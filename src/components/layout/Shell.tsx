@@ -138,7 +138,10 @@ export const Shell = ({ children, activeTab, onTabChange }: ShellProps) => {
       </nav>
       
       {/* Quick Add FAB (Mobile) */}
-      <button className="md:hidden fixed bottom-24 right-6 w-14 h-14 bg-brand text-white rounded-2xl shadow-xl shadow-brand/30 flex items-center justify-center z-30 hover:scale-110 active:scale-95 transition-transform">
+      <button 
+        onClick={() => onTabChange('transactions')}
+        className="md:hidden fixed bottom-24 right-6 w-14 h-14 bg-brand text-white rounded-2xl shadow-xl shadow-brand/30 flex items-center justify-center z-30 hover:scale-110 active:scale-95 transition-transform"
+      >
         <Plus className="w-8 h-8" />
       </button>
     </div>

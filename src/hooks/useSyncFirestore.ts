@@ -20,6 +20,18 @@ export const useSyncFirestore = () => {
           await firestoreService.saveSettings(user.uid, store.settings);
         }
 
+        // Check if user has at least one account, if not create default
+        const accountsRef = doc(db, `users/${user.uid}/accounts/default`);
+        const accountsSnap = await getDoc(accountsRef);
+        if (!accountsSnap.exists()) {
+          await firestoreService.saveAccount(user.uid, {
+            id: 'default',
+            name: 'Conta Principal',
+            balance: 0,
+            type: 'CHECKING',
+          });
+        }
+
         // Set up subscriptions
         const unsubTransactions = firestoreService.subscribeTransactions(store.setTransactions);
         const unsubAccounts = firestoreService.subscribeAccounts(store.setAccounts);

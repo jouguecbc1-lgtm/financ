@@ -42,6 +42,7 @@ export const TransactionView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterType, setFilterType] = useState<'ALL' | 'INCOME' | 'EXPENSE'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<TransactionFormValues>({
     resolver: zodResolver(transactionSchema),
@@ -54,16 +55,30 @@ export const TransactionView = () => {
     }
   });
 
+  // Update accountId when accounts load
+  React.useEffect(() => {
+    if (accounts.length > 0 && !watch('accountId')) {
+      setValue('accountId', accounts[0].id);
+    }
+  }, [accounts, setValue, watch]);
+
   const transactionType = watch('type');
 
-  const onSubmit = (data: TransactionFormValues) => {
-    const newTransaction: Transaction = {
-      ...data,
-      id: Math.random().toString(36).substr(2, 9),
-    };
-    addTransaction(newTransaction);
-    setIsModalOpen(false);
-    reset();
+  const onSubmit = async (data: TransactionFormValues) => {
+    setIsSubmitting(true);
+    try {
+      const newTransaction: Transaction = {
+        ...data,
+        id: Math.random().toString(36).substr(2, 9),
+      };
+      await addTransaction(newTransaction);
+      setIsModalOpen(false);
+      reset();
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const filteredTransactions = transactions.filter(t => {
@@ -318,9 +333,21 @@ export const TransactionView = () => {
 
                 <button 
                   type="submit"
-                  className="w-full bg-brand text-white py-5 rounded-3xl font-bold text-lg shadow-xl shadow-brand/20 hover:scale-[1.02] active:scale-95 transition-all mt-4"
+                  disabled={isSubmitting}
+                  className="w-full bg-brand text-white py-5 rounded-3xl font-bold text-lg shadow-xl shadow-brand/20 hover:scale-[1.02] active:scale-95 transition-all mt-4 disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
                 >
-                  Confirmar Lançamento
+                  {isSubmitting ? (
+                    <>
+                      <motion.div 
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                      />
+                      Processando...
+                    </>
+                  ) : (
+                    'Confirmar Lançamento'
+                  )}
                 </button>
               </form>
             </motion.div>
