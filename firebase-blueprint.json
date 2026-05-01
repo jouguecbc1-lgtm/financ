@@ -1,0 +1,139 @@
+{
+  "entities": {
+    "Transaction": {
+      "title": "Transaction",
+      "description": "A financial transaction (income or expense)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "description": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string", "enum": ["INCOME", "EXPENSE"] },
+        "category": { "type": "string" },
+        "paymentMethod": { "type": "string" },
+        "accountId": { "type": "string" },
+        "cardId": { "type": "string" },
+        "installments": { "type": "number" },
+        "currentInstallment": { "type": "number" },
+        "isRecurring": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["PAID", "PENDING"] },
+        "notes": { "type": "string" },
+        "priority": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "date", "description", "amount", "type", "category", "paymentMethod", "accountId", "isRecurring", "status", "userId"]
+    },
+    "Account": {
+      "title": "Account",
+      "description": "A bank account or cash wallet",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "balance": { "type": "number" },
+        "type": { "type": "string", "enum": ["CHECKING", "SAVINGS", "INVESTMENT", "CASH"] },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "name", "balance", "type", "userId"]
+    },
+    "Investment": {
+      "title": "Investment",
+      "description": "An investment asset",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["SAVINGS", "CDB", "TREASURY", "STOCKS", "FUNDS", "CRYPTO"] },
+        "amount": { "type": "number" },
+        "yield": { "type": "number" },
+        "startDate": { "type": "string" },
+        "history": { 
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "value": { "type": "number" }
+            }
+          }
+        },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "name", "type", "amount", "yield", "startDate", "userId"]
+    },
+    "Goal": {
+      "title": "Goal",
+      "description": "A financial goal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "deadline": { "type": "string" },
+        "category": { "type": "string" },
+        "color": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "name", "targetAmount", "currentAmount", "category", "color", "userId"]
+    },
+    "Card": {
+      "title": "Card",
+      "description": "A credit card",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "lastDigits": { "type": "string" },
+        "limit": { "type": "number" },
+        "availableLimit": { "type": "number" },
+        "closingDay": { "type": "number" },
+        "dueDay": { "type": "number" },
+        "color": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["id", "name", "lastDigits", "limit", "availableLimit", "closingDay", "dueDay", "color", "userId"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "User preferences",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "theme": { "type": "string" },
+        "currency": { "type": "string" },
+        "language": { "type": "string" },
+        "userName": { "type": "string" },
+        "primaryColor": { "type": "string" }
+      },
+      "required": ["userId", "theme", "currency", "language", "userName", "primaryColor"]
+    }
+  },
+  "firestore": {
+    "users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User's financial transactions"
+    },
+    "users/{userId}/accounts/{accountId}": {
+      "schema": "Account",
+      "description": "User's bank accounts"
+    },
+    "users/{userId}/investments/{investmentId}": {
+      "schema": "Investment",
+      "description": "User's investment portfolio"
+    },
+    "users/{userId}/goals/{goalId}": {
+      "schema": "Goal",
+      "description": "User's financial savings goals"
+    },
+    "users/{userId}/cards/{cardId}": {
+      "schema": "Card",
+      "description": "User's credit cards"
+    },
+    "users/{userId}/profile/settings": {
+      "schema": "Settings",
+      "description": "User's app settings"
+    }
+  }
+}
