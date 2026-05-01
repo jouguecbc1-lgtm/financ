@@ -12,7 +12,9 @@ import {
   LogOut,
   Trash2,
   Palette,
-  Check
+  Check,
+  Mail,
+  CreditCard
 } from 'lucide-react';
 import { useFinanceStore } from '../../store/useFinanceStore';
 import { cn } from '../../lib/utils';
